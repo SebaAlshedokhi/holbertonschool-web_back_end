@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """This module provides a helper function"""
 
-from typing import Tuple
 import csv
 import math
-from typing import List
+from typing import Any, Dict, List, Tuple, Optional
 
 
 class Server:
