@@ -43,7 +43,7 @@ class Server:
         indexed = self.indexed_dataset()
 
         # Assert index is in a valid range
-        assert isinstance(index, int) and 0 <= index < len(indexed)
+        assert isinstance(index, int) and 0 <= index < len(self.dataset())
 
         data: List[List] = []
         current = index
@@ -59,6 +59,6 @@ class Server:
         return {
             "index": index,
             "next_index": current,
-            "page_size": len(data),
+            "page_size": page_size,
             "data": data,
         }
