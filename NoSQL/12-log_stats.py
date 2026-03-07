@@ -1,45 +1,30 @@
 #!/usr/bin/env python3
 """
 12-log_stats.py
-
-Provides stats about Nginx logs stored in MongoDB:
-Database: logs
-Collection: nginx
+Provides stats about Nginx logs stored in MongoDB
 """
-
 from pymongo import MongoClient
 
 
-def main():
-    """Print stats about nginx logs in MongoDB."""
-    client = MongoClient("mongodb://127.0.0.1:27017")
+def log_stats():
+    """ Provides some stats about Nginx logs stored in MongoDB """
+    client = MongoClient('mongodb://127.0.0.1:27017')
     collection = client.logs.nginx
 
-    # Total number of logs
-    total = collection.count_documents({})
-    print(f"{total} logs")
+    # عدد السجلات الكلي
+    num_logs = collection.count_documents({})
+    print(f"{num_logs} logs")
 
     print("Methods:")
-
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    counts = {m: 0 for m in methods}
+    for method in methods:
+        count = collection.count_documents({"method": method})
+        print(f"\tmethod {method}: {count}")
 
-    # Count each method using aggregation
-    pipeline = [
-        {"$group": {"_id": "$method", "count": {"$sum": 1}}}
-    ]
-    for doc in collection.aggregate(pipeline):
-        method = doc.get("_id")
-        if method in counts:
-            counts[method] = doc.get("count", 0)
-
-    for m in methods:
-        print(f"\tmethod {m}: {counts[m]}")
-
-    # Count status checks
-    status = collection.count_documents({"method": "GET", "path": "/status"})
-    print(f"{status} status check")
+    # السطر الأخير الخاص بـ status check
+    status_check = collection.count_documents({"method": "GET", "path": "/status"})
+    print(f"{status_check} status check")
 
 
 if __name__ == "__main__":
-    main()
+    log_stats()
