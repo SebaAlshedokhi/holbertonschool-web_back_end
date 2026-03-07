@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-""" Python script that provides some stats"""
+"""
+12-log_stats.py
+
+Provides stats about Nginx logs stored in MongoDB:
+Database: logs
+Collection: nginx
+"""
 
 from pymongo import MongoClient
 
