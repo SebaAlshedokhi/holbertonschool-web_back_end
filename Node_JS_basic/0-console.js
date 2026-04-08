@@ -1,2 +1,3 @@
-def displayMessage(message)
-    print (message)
+function displayMessage(message) {
+  process.stdout.write(message);
+}
