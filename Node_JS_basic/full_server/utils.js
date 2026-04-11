@@ -1,27 +1,25 @@
 import fs from 'fs';
 
-const readDatabase = (path) => new Promise((resolve, reject) => {
-  fs.readFile(path, 'utf8', (error, fileContent) => {
+const readDatabase = (filePath) => new Promise((resolve, reject) => {
+  fs.readFile(filePath, 'utf8', (error, data) => {
     if (error) {
       reject(error);
       return;
     }
 
-    const lines = fileContent.split('\n').filter((line) => line.trim() !== '');
-    const students = lines.slice(1);
-    const studentsByField = {};
+    const rows = data.split('\n').filter((line) => line.trim() !== '');
+    const students = rows.slice(1);
+    const byField = {};
 
     students.forEach((student) => {
       const [firstname, , , field] = student.split(',');
-
-      if (!studentsByField[field]) {
-        studentsByField[field] = [];
+      if (!byField[field]) {
+        byField[field] = [];
       }
-
-      studentsByField[field].push(firstname);
+      byField[field].push(firstname);
     });
 
-    resolve(studentsByField);
+    resolve(byField);
   });
 });
 
