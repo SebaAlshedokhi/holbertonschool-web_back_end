@@ -2,37 +2,32 @@ const fs = require('fs');
 
 function countStudents(path) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', (error, data) => {
+    fs.readFile(path, 'utf8', (error, fileContent) => {
       if (error) {
         reject(new Error('Cannot load the database'));
         return;
       }
 
-      const lines = data.split('\n').filter(line => line.trim() !== '');
+      const lines = fileContent.split('\n').filter((line) => line.trim() !== '');
       const students = lines.slice(1);
-
-      console.log(`Number of students: ${students.length}`);
-
       const fields = {};
 
-      for (const student of students) {
-        const parts = student.split(',');
-        const firstName = parts[0];
-        const field = parts[3];
+      students.forEach((student) => {
+        const [firstname, , , field] = student.split(',');
 
         if (!fields[field]) {
           fields[field] = [];
         }
 
-        fields[field].push(firstName);
-      }
+        fields[field].push(firstname);
+      });
 
-      for (const field in fields) {
-        const names = fields[field];
-        console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
-      }
+      console.log(`Number of students: ${students.length}`);
+      Object.keys(fields).forEach((field) => {
+        console.log(`Number of students in ${field}: ${fields[field].length}. List: ${fields[field].join(', ')}`);
+      });
 
-      resolve(fields); // أفضل من resolve()
+      resolve();
     });
   });
 }
